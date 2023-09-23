@@ -3,11 +3,16 @@ package com.example.reservaya;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.Button;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private Button inicio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +21,17 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        inicio = findViewById(R.id.bt_inicio);
+        inicio.setOnClickListener(inicioListener);
     }
+
+    public View.OnClickListener inicioListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intentRegistrar = new Intent(LoginActivity.this, Home.class);
+            startActivity(intentRegistrar);
+            LoginActivity.this.finish();
+        }
+    };
 
 }
