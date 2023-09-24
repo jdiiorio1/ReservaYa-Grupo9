@@ -21,8 +21,8 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="157dp"
-        android:layout_height="47dp"
+        android:layout_width="186dp"
+        android:layout_height="70dp"
         android:layout_marginTop="72dp"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
