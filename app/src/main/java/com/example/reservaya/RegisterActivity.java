@@ -8,7 +8,10 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +23,12 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText pass;
     private EditText repass;
     private Button registrar;
+
+    private Switch mySwitch;
+
+    private RadioGroup radioGroup;
+
+    private EditText razonSocial;
 
 
     @Override
@@ -42,6 +51,23 @@ public class RegisterActivity extends AppCompatActivity {
         * */
         backLogin.setOnClickListener(backLoginistener);
         registrar.setOnClickListener(registrarListener);
+        mySwitch = findViewById(R.id.switchRol);
+        radioGroup = findViewById(R.id.radioGroup);
+        razonSocial = findViewById(R.id.et_razonSocial);
+
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    radioGroup.setVisibility(View.VISIBLE);
+                    razonSocial.setVisibility(View.VISIBLE);
+                } else {
+                    radioGroup.setVisibility(View.GONE);
+                    razonSocial.setVisibility(View.GONE);
+                }
+            }
+        });
+
     }
 
     public View.OnClickListener backLoginistener = new View.OnClickListener() {
@@ -88,6 +114,12 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Las contraseñas ingresadas no son iguales", Toast.LENGTH_LONG).show();
             error = false;
         }
+
+        if(radioGroup.getVisibility()==View.VISIBLE && razonSocial.getText().toString().isEmpty()){
+            Toast.makeText(getApplicationContext(), "Ingrese su Cuil o Cuit", Toast.LENGTH_LONG).show();
+            error = false;
+        }
+
         return error;
 
     };
