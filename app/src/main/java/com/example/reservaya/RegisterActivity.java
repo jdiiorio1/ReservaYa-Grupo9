@@ -1,5 +1,6 @@
 package com.example.reservaya;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,9 +9,24 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -20,6 +36,16 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText pass;
     private EditText repass;
     private Button registrar;
+
+    private Switch mySwitch;
+
+    private RadioGroup radioGroup;
+
+    private EditText razonSocial;
+
+    RequestQueue requestQueue;
+    private static final String urlInsertarAficionado="http://192.168.1.47/backend/insertarAficionado.php";
+    private static final String urlInsertarPropietario="http://192.168.1.47/backend/insertarPropietario.php";
 
 
     @Override
@@ -42,6 +68,100 @@ public class RegisterActivity extends AppCompatActivity {
         * */
         backLogin.setOnClickListener(backLoginistener);
         registrar.setOnClickListener(registrarListener);
+        mySwitch = findViewById(R.id.switchRol);
+        radioGroup = findViewById(R.id.radioGroup);
+        radioGroup.setVisibility(View.INVISIBLE);
+        razonSocial = findViewById(R.id.et_razonSocial);
+
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    radioGroup.setVisibility(View.VISIBLE);
+                    razonSocial.setVisibility(View.VISIBLE);
+                } else {
+                    radioGroup.setVisibility(View.GONE);
+                    razonSocial.setVisibility(View.GONE);
+                }
+            }
+        });
+
+    }
+
+    public void guardarUsuario(View view){
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        if (radioGroup.getVisibility()==view.VISIBLE){
+            StringRequest stringRequest= new StringRequest(
+                    Request.Method.POST,
+                    urlInsertarPropietario,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Toast.makeText(getApplicationContext(),"Su usuario fue creada con exito", Toast.LENGTH_LONG).show();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getApplicationContext(),"Error, su usuario no fue creado.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+            ){
+                @Nullable
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError{
+                    Map <String, String> params = new HashMap<>();
+                    params.put("nombre", nombre.getText().toString());
+                    params.put("correo_electronico", email.getText().toString());
+                    params.put("contrasena", pass.getText().toString());
+                    boolean esPropietario = true;
+                    params.put("propietario", esPropietario ? "1" : "0");
+                    params.put("cuil", razonSocial.getText().toString());
+
+                    return params;
+                }
+            };
+            requestQueue.add(stringRequest);
+
+        } else {
+            if (radioGroup.getVisibility()==view.INVISIBLE){
+
+                StringRequest stringRequest= new StringRequest(
+                        Request.Method.POST,
+                        urlInsertarAficionado,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(getApplicationContext(),"Su cuenta fue creada con exito", Toast.LENGTH_LONG).show();
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getApplicationContext(),"Error, su cuenta no fue creada", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                ){
+                    @Nullable
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError{
+                        Map <String, String> params = new HashMap<>();
+                        params.put("nombre", nombre.getText().toString());
+                        params.put("correo_electronico", email.getText().toString());
+                        params.put("contrasena", pass.getText().toString());
+                        boolean esPropietario = false;
+                        params.put("propietario", esPropietario ? "1" : "0");
+                        String equipo = "Boca Jr";
+                        params.put("equipo", equipo.toString());
+                        return params;
+                    }
+                };
+                requestQueue.add(stringRequest);
+
+            }
+        }
     }
 
     public View.OnClickListener backLoginistener = new View.OnClickListener() {
@@ -57,10 +177,20 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (validarDatos()) {
-                Toast.makeText(getApplicationContext(),"Su cuenta fue creada con exito", Toast.LENGTH_LONG).show();
+                guardarUsuario(v);
+                loginActivity(v);
             }
         }
     };
+
+    public void loginActivity(View view) {
+        // Crear una intención para ir a OtraActivity
+        Intent intent = new Intent(this, LoginActivity.class);
+
+        // Iniciar la actividad OtraActivity
+        startActivity(intent);
+    }
+
 
     public boolean validarDatos() {
         boolean error = true;
@@ -88,8 +218,15 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Las contraseñas ingresadas no son iguales", Toast.LENGTH_LONG).show();
             error = false;
         }
+
+        if(radioGroup.getVisibility()==View.VISIBLE && razonSocial.getText().toString().isEmpty()){
+            Toast.makeText(getApplicationContext(), "Ingrese su Cuil o Cuit", Toast.LENGTH_LONG).show();
+            error = false;
+        }
+
         return error;
 
     };
+
 
 }
