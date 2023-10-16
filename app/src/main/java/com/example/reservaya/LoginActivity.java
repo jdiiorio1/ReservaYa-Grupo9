@@ -53,17 +53,14 @@ public class LoginActivity extends AppCompatActivity {
             if (correo.getText().toString().isEmpty() || pass.getText().toString().isEmpty()){
                 Toast.makeText(getApplicationContext(), "Completa todos los campos", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
-                Intent intentPropietario = new Intent(LoginActivity.this, PropietarioActivity.class);
-                startActivity(intentPropietario);
-                LoginActivity.this.finish();
+                consultarUsuario(v);
             }
         }
     };
 
     public void consultarUsuario (View view) {
         requestQueue = Volley.newRequestQueue(this);
-        String URL = "http://192.168.1.43/backend/consultarUsuario.php?correo_electronico="+correo.getText().toString();
+        String URL = "http://192.168.1.47/backend/consultarUsuario.php?correo_electronico="+correo.getText().toString();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -73,19 +70,29 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            if (response.has("correo_electronico") && response.has("contraseña")) {
-                                String correo = response.getString("correo_electronico");
+                            if (response.has("correo_electronico") && response.has("contrasena") && response.has("propietario")) {
+                                String correo_electronico = response.getString("correo_electronico");
                                 String password = response.getString("contrasena");
-                                if (password.equals(pass.getText().toString())) {
-                                    Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
-                                    Intent intentHome = new Intent(LoginActivity.this, Home.class);
-                                    startActivity(intentHome);
-                                    LoginActivity.this.finish();
+                                int propietario = response.getInt("propietario");
+                                if (correo_electronico.equals(correo.getText().toString())) {
+                                    if (password.equals(pass.getText().toString())) {
+                                        if (propietario == 1){
+                                            Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
+                                            Intent intentHome = new Intent(LoginActivity.this, PropietarioActivity.class);
+                                            startActivity(intentHome);
+                                            LoginActivity.this.finish();
+                                        }else {
+                                            Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
+                                            Intent intentHome = new Intent(LoginActivity.this, Home.class);
+                                            startActivity(intentHome);
+                                            LoginActivity.this.finish();
+                                        }
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                                    }
                                 } else {
-                                    Toast.makeText(LoginActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "El usuario ingresado no existe", Toast.LENGTH_SHORT).show();
                                 }
-                            } else {
-                                Toast.makeText(LoginActivity.this, "El usuario ingresado no existe", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

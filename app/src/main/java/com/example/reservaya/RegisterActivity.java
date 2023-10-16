@@ -44,8 +44,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText razonSocial;
 
     RequestQueue requestQueue;
-    private static final String urlInsertarAficionado="http://192.168.1.43/backend/insertarAficionado.php";
-    private static final String urlInsertarPropietario="http://192.168.1.43/backend/insertarPropietario.php";
+    private static final String urlInsertarAficionado="http://192.168.1.47/backend/insertarAficionado.php";
+    private static final String urlInsertarPropietario="http://192.168.1.47/backend/insertarPropietario.php";
 
 
     @Override
