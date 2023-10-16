@@ -15,7 +15,7 @@
         android:id="@+id/titulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Registrese"
+        android:text="Complete tus datos"
         android:textColor="@color/white"
         android:textSize="34sp"
         android:textStyle="bold"

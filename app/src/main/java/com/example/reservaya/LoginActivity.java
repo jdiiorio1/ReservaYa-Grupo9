@@ -35,6 +35,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(null);
+
 
         inicio = findViewById(R.id.bt_inicio);
         registro = findViewById(R.id.bt_registro);
@@ -80,12 +83,10 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
                                             Intent intentHome = new Intent(LoginActivity.this, PropietarioActivity.class);
                                             startActivity(intentHome);
-                                            LoginActivity.this.finish();
                                         }else {
                                             Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
                                             Intent intentHome = new Intent(LoginActivity.this, Home.class);
                                             startActivity(intentHome);
-                                            LoginActivity.this.finish();
                                         }
                                     } else {
                                         Toast.makeText(LoginActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
@@ -114,8 +115,15 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View v) {
             Intent intentRegistrar = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intentRegistrar);
-            LoginActivity.this.finish();
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Limpia los datos cuando el Activity vuelve a estar en primer plano
+        correo.setText("");
+        pass.setText("");
+    }
 
 }

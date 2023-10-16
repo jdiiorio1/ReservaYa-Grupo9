@@ -9,7 +9,7 @@
     tools:context=".PropietarioActivity">
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar2"/>
+        layout="@layout/toolbar"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
