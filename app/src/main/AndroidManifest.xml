@@ -23,6 +23,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NewComplejoActivity"
+            android:exported="false"
+            android:parentActivityName=".PropietarioActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PropietarioActivity"/>
+        </activity>
+        <activity
             android:name=".PerfilAficionadoActivity"
             android:exported="false" />
         <activity
