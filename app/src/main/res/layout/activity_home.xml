@@ -7,36 +7,45 @@
     android:background="@drawable/estadio_fondo2"
     android:focusedByDefault="false">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="147dp"
-        android:layout_height="79dp"
-        android:layout_marginTop="120dp"
-        android:text="Bienvenido"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-        android:textColor="#F3E2E2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="186dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="72dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="253dp"
-        android:layout_height="254dp"
-        android:layout_marginBottom="68dp"
+    <org.osmdroid.views.MapView
+        android:id="@+id/osmmap"
+        android:layout_width="396dp"
+        android:layout_height="553dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.438" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="361dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Complejos en tu zona"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FDFDFD"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/osmmap"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/bt_perfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Editar perfil"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.137"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/osmmap"
+        app:layout_constraintVertical_bias="0.821" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
