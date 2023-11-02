@@ -6,23 +6,15 @@
     android:layout_height="match_parent"
     android:background="@drawable/estadio_fondo2"
     android:focusedByDefault="false">
-
-    <org.osmdroid.views.MapView
-        android:id="@+id/osmmap"
-        android:layout_width="396dp"
-        android:layout_height="553dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.438" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="361dp"
         android:layout_height="42dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-black"
         android:text="Complejos en tu zona"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -30,9 +22,23 @@
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/osmmap"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.307" />
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/osmmap"
+        android:layout_width="392dp"
+        android:layout_height="490dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.58">
+
+    </org.osmdroid.views.MapView>
 
     <Button
         android:id="@+id/bt_perfil"
@@ -40,13 +46,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:text="Editar perfil"
-        android:backgroundTint="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.137"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/osmmap"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintVertical_bias="0.821" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
