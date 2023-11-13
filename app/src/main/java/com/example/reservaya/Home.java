@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
@@ -33,12 +35,16 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import android.preference.PreferenceManager;
 import android.service.autofill.OnClickAction;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
@@ -48,6 +54,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -56,13 +63,14 @@ import java.util.Iterator;
 
 public class Home extends AppCompatActivity {
 
-    private Button edit_perfil;
+
     private MapView         mMapView;
     private MapController   mMapController;
 
     private LocationManager locationManager;
 
     private RequestQueue requestQueue;
+    private LinearLayout parentLayout;
 
     // Default map zoom level:
     private int MAP_DEFAULT_ZOOM = 16;
@@ -73,26 +81,36 @@ public class Home extends AppCompatActivity {
     // Default map Longitude:
     private double MAP_DEFAULT_LONGITUDE = -57.92529;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottonNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_home);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+
+            int id = item.getItemId();
+            if (id == R.id.bottom_home) {
+                return true;
+            } else if (id == R.id.bottom_edit) {
+                startActivity(new Intent(getApplicationContext(), PerfilAficionadoActivity.class));
+                overridePendingTransition(R.anim.slide_out_izq, R.anim.slide_in_der);
+                finish();
+                return true;
+            } else {
+                return false;
+            }
+        });
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
         setTitle("Elegí donde jugar");
-
-        /*
-         * Asocio las instancias a la interfaz
-         * */
-        edit_perfil = findViewById(R.id.bt_perfil);
-
-        /*
-         * Creo los listener de los elementos clickeables
-         * */
-        edit_perfil.setOnClickListener(editPerfilListener);
 
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -102,7 +120,6 @@ public class Home extends AppCompatActivity {
                 requestPermissions(permisos, 1);
             }
         }
-
 
 
 
@@ -120,9 +137,13 @@ public class Home extends AppCompatActivity {
         GeoPoint center = new GeoPoint(MAP_DEFAULT_LATITUDE,MAP_DEFAULT_LONGITUDE);
         mMapController.animateTo(center);
         addMarker(center);
+        //cargo la lista de complejos en el scroolview
+        parentLayout = findViewById(R.id.contenedorListaComplejos);
+
 
         // consulto a la base de datos para obtener los complejos y agregar los marcadores en el mapa
         cargarMapaConComplejos();
+
 
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -165,10 +186,22 @@ public class Home extends AppCompatActivity {
                                 String nombre = object.getString("nombre");
                                 String latitud = object.getString("latitud");
                                 String longitud = object.getString("longitud");
-                                Toast.makeText(Home.this, "complejo:" + nombre, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(Home.this, "complejo:" + nombre, Toast.LENGTH_SHORT).show();
 
                                 addMarker(new GeoPoint(Double.parseDouble(latitud), Double.parseDouble(longitud)), nombre);
 
+                                //cargo la lista de complejos en el scrollview
+                                LinearLayout linearLayout = new LinearLayout(Home.this);
+                                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+
+                                TextView tituloView = new TextView(Home.this);
+                                tituloView.setBackground(ContextCompat.getDrawable(Home.this, R.drawable.input_box));
+                                tituloView.setTextColor(ContextCompat.getColor(Home.this, R.color.white));
+                                tituloView.setPadding(20,20,20,20);
+                                tituloView.setText(nombre);
+                                linearLayout.addView(tituloView);
+                                parentLayout.addView(linearLayout);
                             }
 
                         } catch (Exception e) {
@@ -194,7 +227,7 @@ public class Home extends AppCompatActivity {
         Marker marker = new Marker(mMapView);
         marker.setPosition(center);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        marker.setIcon(getResources().getDrawable(R.drawable.bs_location));
+        marker.setIcon(getResources().getDrawable(R.drawable.persona_saludo));
 
         mMapView.getOverlays().clear();
         mMapView.getOverlays().add(marker);
@@ -211,9 +244,19 @@ public class Home extends AppCompatActivity {
         mMapView.getOverlays().add(marker);
         mMapView.invalidate();
         marker.setTitle(nombreEstadio);
+        marker.setTextLabelBackgroundColor(16);
+        marker.setOnMarkerClickListener(onMarkerClickListener);
     }
 
-
+    public Marker.OnMarkerClickListener onMarkerClickListener = new Marker.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker, MapView mapView) {
+            marker.showInfoWindow();
+            mapView.getController().animateTo(marker.getPosition());
+            Toast.makeText(Home.this, "complejo:" + marker.getTitle(), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    } ;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/estadio_fondo2"
-    android:focusedByDefault="false">
+    android:focusedByDefault="false"
+    tools:context=".Home">
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
@@ -18,7 +19,7 @@
         android:fontFamily="sans-serif-black"
         android:text="Complejos en tu zona"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#FDFDFD"
+        android:textColor="#2E5730"
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/osmmap"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,29 +30,48 @@
 
     <org.osmdroid.views.MapView
         android:id="@+id/osmmap"
-        android:layout_width="392dp"
-        android:layout_height="490dp"
+        android:layout_width="407dp"
+        android:layout_height="340dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.58">
+        app:layout_constraintVertical_bias="0.282">
 
     </org.osmdroid.views.MapView>
 
-    <Button
-        android:id="@+id/bt_perfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="Editar perfil"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/bottonNavigationView"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:elevation="2dp"
+        app:menu="@menu/bottom_menu"
+        app:itemIconSize="30dp"
+        app:itemIconTint="@drawable/item_selector"
+        app:labelVisibilityMode="unlabeled"
+        android:background="@drawable/bottom_background"
         app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <HorizontalScrollView
+        android:layout_width="410dp"
+        android:layout_height="156dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottonNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.137"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/osmmap"
-        app:layout_constraintVertical_bias="0.821" />
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/contenedorListaComplejos"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

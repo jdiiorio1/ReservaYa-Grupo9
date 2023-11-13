@@ -7,4 +7,8 @@
     </style>
 
     <style name="Theme.ReservaYa" parent="Base.Theme.ReservaYa" />
+    <style name="SlideActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_der</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_izq</item>
+    </style>
 </resources>

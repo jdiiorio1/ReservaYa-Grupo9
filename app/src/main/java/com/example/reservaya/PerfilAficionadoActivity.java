@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class PerfilAficionadoActivity extends AppCompatActivity {
     private Button volver;
 
@@ -21,6 +23,23 @@ public class PerfilAficionadoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
         setTitle("Editá tu perfil");
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottonNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_edit);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.bottom_edit) {
+                return true;
+            } else if (id == R.id.bottom_home) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                overridePendingTransition(R.anim.slide_out_izq, R.anim.slide_in_der);
+                finish();
+                return true;
+            } else {
+                return false;
+            }
+        });
 
         /*
          * Asocio las instancias a la interfaz
