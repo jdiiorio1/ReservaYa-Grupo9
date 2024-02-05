@@ -1,9 +1,12 @@
 package com.example.reservaya;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -30,6 +33,8 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.infowindow.InfoWindow;
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -39,13 +44,19 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -56,14 +67,20 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.sql.Array;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 
 public class Home extends AppCompatActivity {
 
-
+    private RecyclerView recycler;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager lManager;
+    private TextView tvCalendario;
+    private TextView tvHorario;
     private MapView         mMapView;
     private MapController   mMapController;
 
@@ -73,7 +90,7 @@ public class Home extends AppCompatActivity {
     private LinearLayout parentLayout;
 
     // Default map zoom level:
-    private int MAP_DEFAULT_ZOOM = 16;
+    private int MAP_DEFAULT_ZOOM = 14;
 
     // Default map Latitude:
     private double MAP_DEFAULT_LATITUDE = -34.90445;
@@ -121,6 +138,25 @@ public class Home extends AppCompatActivity {
             }
         }
 
+        // Obtener el Recycler
+        recycler = (RecyclerView) findViewById(R.id.recicladorComplejos);
+        recycler.setHasFixedSize(true);
+
+        // Usar un administrador para LinearLayout
+        lManager = new LinearLayoutManager(Home.this, LinearLayoutManager.HORIZONTAL, false);
+        recycler.setLayoutManager(lManager);
+
+        /*
+         * Asocio las instancias a la interfaz
+         * */
+        tvCalendario = findViewById(R.id.tvfecha);
+        tvHorario = findViewById(R.id.tvhora);
+
+        /*
+         * Creo los listener para la seleccion de fecha y horario
+         * */
+        tvCalendario.setOnClickListener(calendarioOnClickListener);
+        tvHorario.setOnClickListener(horarioOnClickListener);
 
 
         //Donde muestra la imagen del mapa
@@ -136,13 +172,15 @@ public class Home extends AppCompatActivity {
 
         GeoPoint center = new GeoPoint(MAP_DEFAULT_LATITUDE,MAP_DEFAULT_LONGITUDE);
         mMapController.animateTo(center);
+
         addMarker(center);
+
         //cargo la lista de complejos en el scroolview
-        parentLayout = findViewById(R.id.contenedorListaComplejos);
+      //  parentLayout = findViewById(R.id.contenedorListaComplejos);
 
 
         // consulto a la base de datos para obtener los complejos y agregar los marcadores en el mapa
-        cargarMapaConComplejos();
+        //cargarMapaConComplejos();
 
 
 
@@ -168,9 +206,89 @@ public class Home extends AppCompatActivity {
 
     }
 
-    public void cargarMapaConComplejos () {
+    /*
+    * Creo los selectores de fecha y horario
+    *
+     */
+
+    public View.OnClickListener calendarioOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // Get Current Date
+            final Calendar c = Calendar.getInstance();
+            int mAnio = c.get(Calendar.YEAR);
+            int mMes = c.get(Calendar.MONTH);
+            int mSemana = c.get(Calendar.WEEK_OF_YEAR);
+            int mDia = c.get(Calendar.DAY_OF_MONTH);
+
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(Home.this, //R.style.Dialog_Theme_ReservaYa,
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year,
+                                              int monthOfYear, int dayOfMonth) {
+
+
+                            //tvCalendario.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            tvCalendario.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+
+                        }
+                    }, mAnio, mMes, mDia);
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
+
+            datePickerDialog.show();
+
+        }
+    };
+
+    public View.OnClickListener horarioOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // Get Current Time
+            final Calendar c = Calendar.getInstance();
+            int mHora;
+            if (tvHorario.getText().toString().equals("")) {
+                mHora = c.get(Calendar.HOUR_OF_DAY);
+            } else {
+                mHora = Integer.parseInt(tvHorario.getText().toString());
+            }
+
+            int mMinuto = 0;
+
+            // Launch Time Picker Dialog
+            TimePickerDialog timePickerDialog = new TimePickerDialog(Home.this,
+                    new TimePickerDialog.OnTimeSetListener() {
+
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay,
+                                              int minute) {
+
+                            tvHorario.setText(String.valueOf(hourOfDay));
+                            // consulto a la base de datos para obtener los complejos y agregar los marcadores en el mapa
+                            mMapView.getOverlays().clear();
+                            mMapView.clearFocus();
+
+                            GeoPoint center = new GeoPoint(MAP_DEFAULT_LATITUDE,MAP_DEFAULT_LONGITUDE);
+                            mMapController.animateTo(center);
+
+                            addMarker(center);
+                            cargarMapaConComplejos(tvCalendario.getText().toString(), tvHorario.getText().toString());
+
+                        }
+                    }, mHora, mMinuto, false);
+            timePickerDialog.show();
+
+
+
+        }
+    };
+
+
+    public void cargarMapaConComplejos (String fecha, String hora) {
         requestQueue = Volley.newRequestQueue(this);
-        String URL = "http://192.168.1.35/backend/cargarComplejos.php";
+        String URL = "http://192.168.1.35/backend/cargarComplejosFiltrados.php?fecha=" + fecha + "&hora=" + hora;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL,
@@ -180,29 +298,66 @@ public class Home extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         try {
                             JSONArray jsonArray = response;
+                            // Inicializar complejos
+                            List items = new ArrayList();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject object = jsonArray.getJSONObject(i);
+                                String idComplejo = object.getString("id");
                                 String nombre = object.getString("nombre");
                                 String latitud = object.getString("latitud");
                                 String longitud = object.getString("longitud");
+                                String cantCanchas = object.getString("cant_canchas");
                                 //Toast.makeText(Home.this, "complejo:" + nombre, Toast.LENGTH_SHORT).show();
+                                int imagenComplejo = getResources().getIdentifier("complejo_"+idComplejo, "drawable", getPackageName());
+                                items.add(new Complejo(idComplejo, nombre, imagenComplejo, "Calle falsa 123", cantCanchas));
 
-                                addMarker(new GeoPoint(Double.parseDouble(latitud), Double.parseDouble(longitud)), nombre);
+
+                                addMarker(new GeoPoint(Double.parseDouble(latitud), Double.parseDouble(longitud)), nombre, cantCanchas, idComplejo);
 
                                 //cargo la lista de complejos en el scrollview
-                                LinearLayout linearLayout = new LinearLayout(Home.this);
+                          /*      LinearLayout linearLayout = new LinearLayout(Home.this);
                                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
 
                                 TextView tituloView = new TextView(Home.this);
+
                                 tituloView.setBackground(ContextCompat.getDrawable(Home.this, R.drawable.input_box));
                                 tituloView.setTextColor(ContextCompat.getColor(Home.this, R.color.white));
-                                tituloView.setPadding(20,20,20,20);
-                                tituloView.setText(nombre);
+                                tituloView.setPadding(40,40,40,40);
+                                tituloView.setId(Integer.parseInt(idComplejo));
+                                int idTextview = tituloView.getId();
+                                tituloView.setText(nombre + "\n" + "canchas disponibles: " + cantCanchas + "\n" + "Reserva ya");
+
+
+                                tituloView.setOnClickListener(onComplejoClickListerner);
                                 linearLayout.addView(tituloView);
-                                parentLayout.addView(linearLayout);
+
+                                parentLayout.addView(linearLayout);*/
                             }
+
+                            // Crear un nuevo adaptador
+                            final ComplejosAdapter adapter = new ComplejosAdapter(items);
+                            recycler.setAdapter(adapter);
+
+                            int resId = R.anim.layout_animation_rotate_in;
+                            LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(Home.this, resId);
+                            recycler.setLayoutAnimation(animation);
+                            adapter.notifyDataSetChanged();
+                            adapter.setOnClickListener(new ComplejosAdapter.OnClickListener() {
+                                @Override
+                                public void onClick(int position, Complejo model) {
+
+                                    Intent intentRervaCancha = new Intent(Home.this, ReservaCanchas.class);
+                                    intentRervaCancha.putExtra("complejoId", model.getId());
+                                    intentRervaCancha.putExtra("fecha", fecha);
+                                    intentRervaCancha.putExtra("hora", hora);
+                                    startActivity(intentRervaCancha);
+                                    //Home.this.finish();
+                                }
+                            });
+
+                            //recycler.setOnClickListener(onComplejoClickListerner);
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -235,15 +390,25 @@ public class Home extends AppCompatActivity {
         marker.setTitle("este so vo");
     }
 
-    public void addMarker (GeoPoint center, String nombreEstadio){
+    public void addMarker (GeoPoint center, String nombreEstadio, String cantCanchas, String id){
         Marker marker = new Marker(mMapView);
         marker.setPosition(center);
+        marker.setId(id);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setIcon(getResources().getDrawable(R.drawable.bs_location));
         // mMapView.getOverlays().clear();
         mMapView.getOverlays().add(marker);
         mMapView.invalidate();
-        marker.setTitle(nombreEstadio);
+
+
+
+
+        //marker.getInfoWindow().getView().setBackground(ContextCompat.getDrawable(Home.this, R.drawable.input_button));
+        //marker.getInfoWindow().getView().setBackgroundColor(Color.parseColor("#378a1e"));
+
+        marker.setTitle(nombreEstadio + "\n" + cantCanchas +" canchas disponibles");
+
+        marker.setTextLabelForegroundColor(16);
         marker.setTextLabelBackgroundColor(16);
         marker.setOnMarkerClickListener(onMarkerClickListener);
     }
@@ -252,11 +417,32 @@ public class Home extends AppCompatActivity {
         @Override
         public boolean onMarkerClick(Marker marker, MapView mapView) {
             marker.showInfoWindow();
+
             mapView.getController().animateTo(marker.getPosition());
-            Toast.makeText(Home.this, "complejo:" + marker.getTitle(), Toast.LENGTH_SHORT).show();
+
+
+
+           // Toast.makeText(Home.this, "complejo:" + marker.getTitle(), Toast.LENGTH_SHORT).show();
             return false;
         }
     } ;
+
+
+
+
+
+    public View.OnClickListener onComplejoClickListerner = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+           // TextView item = (TextView) v;
+           // String nombre = ((TextView) v).getText().toString();
+            Intent intentRervaCancha = new Intent(Home.this, ReservaCanchas.class);
+            startActivity(intentRervaCancha);
+            Home.this.finish();
+
+        }
+    };
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

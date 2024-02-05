@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
+    <item
+        android:id="@+id/bottom_home"
+        android:icon="@drawable/home"
+        android:title="Principal"/>
     <item
         android:id="@+id/bottom_edit"
         android:icon="@drawable/edit"
@@ -11,10 +14,7 @@
         android:id="@+id/bottom_settings"
         android:icon="@drawable/configuracion"
         android:title="Preferencias"/>
-    <item
-        android:id="@+id/bottom_home"
-        android:icon="@drawable/home"
-        android:title="Principal"/>
+
     <item
         android:id="@+id/bottom_acerca_de"
         android:icon="@drawable/acerca_de"
