@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }else {
                                             Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
                                             Intent intentHome = new Intent(LoginActivity.this, Home.class);
-                                            intentHome.putExtra("id", id);
+                                            intentHome.putExtra("id_usuario", id);
                                             startActivity(intentHome);
                                         }
                                     } else {

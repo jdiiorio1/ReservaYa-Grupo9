@@ -76,6 +76,8 @@ import java.util.List;
 
 public class Home extends AppCompatActivity {
 
+    private int idUsuario;
+
     private RecyclerView recycler;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager lManager;
@@ -105,6 +107,13 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            idUsuario = extras.getInt("id_usuario");
+            Log.i("extra", "se llego al home con un extra " +  idUsuario);
+
+        }
+        Log.i("extra", "el usuario es " +  idUsuario);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottonNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
 
@@ -352,6 +361,7 @@ public class Home extends AppCompatActivity {
                                     intentRervaCancha.putExtra("complejoId", model.getId());
                                     intentRervaCancha.putExtra("fecha", fecha);
                                     intentRervaCancha.putExtra("hora", hora);
+                                    intentRervaCancha.putExtra("idUsuario", idUsuario);
                                     startActivity(intentRervaCancha);
                                     //Home.this.finish();
                                 }

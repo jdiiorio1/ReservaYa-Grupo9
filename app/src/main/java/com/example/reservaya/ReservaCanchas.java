@@ -42,6 +42,7 @@ public class ReservaCanchas extends AppCompatActivity {
     private String complejoId;
     private String fecha;
     private String hora;
+    private int idUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +54,11 @@ public class ReservaCanchas extends AppCompatActivity {
              complejoId = extras.getString("complejoId");
              fecha = extras.getString("fecha");
              hora = extras.getString("hora");
+             idUsuario = extras.getInt("idUsuario");
+
         }
 
-        Toast.makeText(ReservaCanchas.this, "complejo id:" + complejoId + " Fecha" + fecha + " Hora:" + hora, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(ReservaCanchas.this, "usuario id:" + idUsuario + " Fecha" + fecha + " Hora:" + hora, Toast.LENGTH_SHORT).show();
 
         // Obtener las canchas disponibles desde la bsae de datos
         requestQueue = Volley.newRequestQueue(this);
@@ -112,7 +115,7 @@ public class ReservaCanchas extends AppCompatActivity {
                                     dialogoConfirmacion.setPositiveButton("Reservar", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            realizarReserva(model.getId(), complejoId, fecha, hora);
+                                            realizarReserva(model.getId(), idUsuario, fecha, hora);
                                             //Toast.makeText(ReservaCanchas.this, "Reservada", Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -170,7 +173,7 @@ public class ReservaCanchas extends AppCompatActivity {
     }
 
 
-    public void realizarReserva(String idCancha, String idComplejo, String fecha, String hora) {
+    public void realizarReserva(String idCancha, int idUsuario, String fecha, String hora) {
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
@@ -193,7 +196,7 @@ public class ReservaCanchas extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 Map <String, String> params = new HashMap<>();
                 params.put("id_cancha", idCancha);
-                params.put("id_complejo", idComplejo);
+                params.put("id_usuario", String.valueOf(idUsuario));
                 params.put("fecha", fecha);
                 params.put("hora", hora);
 
