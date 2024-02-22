@@ -12,7 +12,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,14 +22,13 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReservaCanchas extends AppCompatActivity {
+public class ReservaCanchasActivity extends AppCompatActivity {
 
     /*
     Declarar instancias globales
@@ -99,7 +97,7 @@ public class ReservaCanchas extends AppCompatActivity {
                             recycler.setAdapter(adapter);
 
                             int resId = R.anim.layout_animation_rotate_in;
-                            LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ReservaCanchas.this, resId);
+                            LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ReservaCanchasActivity.this, resId);
                             recycler.setLayoutAnimation(animation);
                             adapter.notifyDataSetChanged();
 
@@ -107,7 +105,7 @@ public class ReservaCanchas extends AppCompatActivity {
                                 @Override
                                 public void onClick(int position, Cancha model) {
 
-                                    AlertDialog.Builder dialogoConfirmacion = new AlertDialog.Builder(ReservaCanchas.this);
+                                    AlertDialog.Builder dialogoConfirmacion = new AlertDialog.Builder(ReservaCanchasActivity.this);
                                     dialogoConfirmacion.setTitle("Confirmar reserva");
 
                                     dialogoConfirmacion.setMessage("Esta por reservar esta cancha de " +model.getCapacidad()+ " para el dia " + fecha + " a las " + hora + " horas");
@@ -140,7 +138,7 @@ public class ReservaCanchas extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(ReservaCanchas.this, "Error al obtener las canchas", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ReservaCanchasActivity.this, "Error al obtener las canchas", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -181,13 +179,13 @@ public class ReservaCanchas extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(ReservaCanchas.this,"Se realizó su reserva", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ReservaCanchasActivity.this,"Se realizó su reserva", Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ReservaCanchas.this,"Por favor intente mas tarde", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ReservaCanchasActivity.this,"Por favor intente mas tarde", Toast.LENGTH_LONG).show();
                     }
                 }
         ){

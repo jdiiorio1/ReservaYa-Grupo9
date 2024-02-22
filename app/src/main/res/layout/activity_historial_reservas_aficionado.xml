@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/estadio_fondo2"
-    tools:context=".ReservaCanchasActivity">
+    tools:context=".HistorialReservasAficionadoActivity">
+
 
     <androidx.recyclerview.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/reciclador"
+        android:id="@+id/rv_historial_aficionado"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="3dp"

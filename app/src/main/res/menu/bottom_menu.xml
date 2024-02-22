@@ -6,7 +6,7 @@
         android:icon="@drawable/home"
         android:title="Principal"/>
     <item
-        android:id="@+id/bottom_edit"
+        android:id="@+id/bt_historial_aficionado"
         android:icon="@drawable/edit"
         android:title="Editar perfil"/>
 

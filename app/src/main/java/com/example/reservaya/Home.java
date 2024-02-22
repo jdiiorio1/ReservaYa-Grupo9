@@ -6,21 +6,15 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapListener;
@@ -31,29 +25,19 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.compass.CompassOverlay;
-import org.osmdroid.views.overlay.infowindow.InfoWindow;
-import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
-import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import android.preference.PreferenceManager;
-import android.service.autofill.OnClickAction;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,15 +47,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
 public class Home extends AppCompatActivity {
@@ -122,10 +103,15 @@ public class Home extends AppCompatActivity {
             int id = item.getItemId();
             if (id == R.id.bottom_home) {
                 return true;
-            } else if (id == R.id.bottom_edit) {
-                startActivity(new Intent(getApplicationContext(), PerfilAficionadoActivity.class));
+            } else if (id == R.id.bt_historial_aficionado) {
                 overridePendingTransition(R.anim.slide_out_izq, R.anim.slide_in_der);
-                finish();
+
+                Log.i("logReserva", "ingreso a pantalla de historial para el usuairo de id" + idUsuario);
+                Intent intentHistorialAficionado = new Intent(Home.this, HistorialReservasAficionadoActivity.class);
+                intentHistorialAficionado.putExtra("idUsuario", idUsuario);
+                startActivity(intentHistorialAficionado);
+
+                //finish();
                 return true;
             } else {
                 return false;
@@ -357,7 +343,7 @@ public class Home extends AppCompatActivity {
                                 @Override
                                 public void onClick(int position, Complejo model) {
 
-                                    Intent intentRervaCancha = new Intent(Home.this, ReservaCanchas.class);
+                                    Intent intentRervaCancha = new Intent(Home.this, ReservaCanchasActivity.class);
                                     intentRervaCancha.putExtra("complejoId", model.getId());
                                     intentRervaCancha.putExtra("fecha", fecha);
                                     intentRervaCancha.putExtra("hora", hora);
@@ -447,7 +433,7 @@ public class Home extends AppCompatActivity {
             int id = v.getId();
            // TextView item = (TextView) v;
            // String nombre = ((TextView) v).getText().toString();
-            Intent intentRervaCancha = new Intent(Home.this, ReservaCanchas.class);
+            Intent intentRervaCancha = new Intent(Home.this, ReservaCanchasActivity.class);
             startActivity(intentRervaCancha);
             Home.this.finish();
 

@@ -23,7 +23,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ReservaCanchas"
+            android:name=".HistorialReservasAficionadoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReservaCanchasActivity"
             android:exported="false" />
         <activity
             android:name=".NewComplejoActivity"

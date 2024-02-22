@@ -25,11 +25,11 @@ public class PerfilAficionadoActivity extends AppCompatActivity {
         setTitle("Editá tu perfil");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottonNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_edit);
+        bottomNavigationView.setSelectedItemId(R.id.bt_historial_aficionado);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.bottom_edit) {
+            if (id == R.id.bt_historial_aficionado) {
                 return true;
             } else if (id == R.id.bottom_home) {
                 startActivity(new Intent(getApplicationContext(), Home.class));
