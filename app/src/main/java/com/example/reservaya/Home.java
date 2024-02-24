@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,12 +28,17 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -40,7 +46,9 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -51,6 +59,8 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -64,23 +74,22 @@ public class Home extends AppCompatActivity {
     private RecyclerView.LayoutManager lManager;
     private TextView tvCalendario;
     private TextView tvHorario;
+    private EditText tvDistancia;
     private MapView         mMapView;
     private MapController   mMapController;
 
     private LocationManager locationManager;
+    private Location locationGPS = new Location("");
 
     private RequestQueue requestQueue;
     private LinearLayout parentLayout;
-
     // Default map zoom level:
     private int MAP_DEFAULT_ZOOM = 14;
-
     // Default map Latitude:
     private double MAP_DEFAULT_LATITUDE = -34.90445;
-
     // Default map Longitude:
     private double MAP_DEFAULT_LONGITUDE = -57.92529;
-
+    private int distanciaInt = 100;
 
 
     @Override
@@ -146,12 +155,66 @@ public class Home extends AppCompatActivity {
          * */
         tvCalendario = findViewById(R.id.tvfecha);
         tvHorario = findViewById(R.id.tvhora);
+        tvDistancia = findViewById(R.id.tvdistancia);
+
+
+        /*
+        * Inicializo los valores de los filtros
+         */
+        // Get Current Date
+     /*   final Calendar c = Calendar.getInstance();
+        int mAnio = c.get(Calendar.YEAR);
+        int mMes = c.get(Calendar.MONTH);
+        int mSemana = c.get(Calendar.WEEK_OF_YEAR);
+        int mDia = c.get(Calendar.DAY_OF_MONTH);
+        int mHora;
+        mHora = c.get(Calendar.HOUR_OF_DAY);
+
+        tvCalendario.setText(mAnio + "-" + (mMes + 1) + "-" + mDia);
+        tvHorario.setText(mHora);
+        Log.i("logReserva", "la distancia sin setear es" + tvDistancia.getText().toString());
+*/
+
+
 
         /*
          * Creo los listener para la seleccion de fecha y horario
          * */
         tvCalendario.setOnClickListener(calendarioOnClickListener);
         tvHorario.setOnClickListener(horarioOnClickListener);
+
+        tvDistancia.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.i("logReserva", "entro en el listener de distancia" );
+                // consulto a la base de datos para obtener los complejos y agregar los marcadores en el mapa
+                mMapView.getOverlays().clear();
+                mMapView.clearFocus();
+
+                GeoPoint center = new GeoPoint(MAP_DEFAULT_LATITUDE,MAP_DEFAULT_LONGITUDE);
+                mMapController.animateTo(center);
+                Log.i("logReserva", "la distancia sin setear es" + tvDistancia.getText().toString());
+                if (tvDistancia.getText().toString().equals("") || tvDistancia.getText().toString().isEmpty()) {
+                    distanciaInt = 100;
+                } else {
+                    distanciaInt = Integer.parseInt(tvDistancia.getText().toString());
+                }
+
+                addMarker(center);
+                cargarMapaConComplejos(tvCalendario.getText().toString(), tvHorario.getText().toString(), distanciaInt);
+            }
+        });
+
 
 
         //Donde muestra la imagen del mapa
@@ -232,6 +295,21 @@ public class Home extends AppCompatActivity {
                     }, mAnio, mMes, mDia);
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
+            // consulto a la base de datos para obtener los complejos y agregar los marcadores en el mapa
+            mMapView.getOverlays().clear();
+            mMapView.clearFocus();
+
+            GeoPoint center = new GeoPoint(MAP_DEFAULT_LATITUDE,MAP_DEFAULT_LONGITUDE);
+            mMapController.animateTo(center);
+            Log.i("logReserva", "la distancia sin setear es" + tvDistancia.getText().toString());
+            if (tvDistancia.getText().toString().equals("") || tvDistancia.getText().toString().isEmpty()) {
+                distanciaInt = 100;
+            } else {
+                distanciaInt = Integer.parseInt(tvDistancia.getText().toString());
+            }
+
+            addMarker(center);
+            cargarMapaConComplejos(tvCalendario.getText().toString(), tvHorario.getText().toString(), distanciaInt);
 
             datePickerDialog.show();
 
@@ -268,8 +346,16 @@ public class Home extends AppCompatActivity {
                             GeoPoint center = new GeoPoint(MAP_DEFAULT_LATITUDE,MAP_DEFAULT_LONGITUDE);
                             mMapController.animateTo(center);
 
+                            Log.i("logReserva", "la distancia sin setear es" + tvDistancia.getText().toString());
+                            if (tvDistancia.getText().toString().equals("") || tvDistancia.getText().toString().isEmpty()) {
+                                distanciaInt = 100;
+                            } else {
+                                distanciaInt = Integer.parseInt(tvDistancia.getText().toString());
+                            }
+
                             addMarker(center);
-                            cargarMapaConComplejos(tvCalendario.getText().toString(), tvHorario.getText().toString());
+
+                            cargarMapaConComplejos(tvCalendario.getText().toString(), tvHorario.getText().toString(), distanciaInt);
 
                         }
                     }, mHora, mMinuto, false);
@@ -281,7 +367,11 @@ public class Home extends AppCompatActivity {
     };
 
 
-    public void cargarMapaConComplejos (String fecha, String hora) {
+
+
+    public void cargarMapaConComplejos (String fecha, String hora, int filtroDistancia) {
+
+
         requestQueue = Volley.newRequestQueue(this);
         String URL = "http://192.168.1.35/backend/cargarComplejosFiltrados.php?fecha=" + fecha + "&hora=" + hora;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
@@ -302,38 +392,53 @@ public class Home extends AppCompatActivity {
                                 String nombre = object.getString("nombre");
                                 String latitud = object.getString("latitud");
                                 String longitud = object.getString("longitud");
+                                String calle = object.getString("calle");
+                                String numero = object.getString("numero");
                                 String cantCanchas = object.getString("cant_canchas");
                                 //Toast.makeText(Home.this, "complejo:" + nombre, Toast.LENGTH_SHORT).show();
                                 int imagenComplejo = getResources().getIdentifier("complejo_"+idComplejo, "drawable", getPackageName());
-                                items.add(new Complejo(idComplejo, nombre, imagenComplejo, "Calle falsa 123", cantCanchas));
+                               // items.add(new Complejo(idComplejo, nombre, imagenComplejo, "Calle " + calle + " Nro: " + numero, cantCanchas, ));
+
+                                // Armo la posicion del complejo como Location para medir la distancia con la locacion del GPS
+                                Location markerLocation = new Location("");
+                                GeoPoint complejoPoint = new GeoPoint(Double.parseDouble(latitud), Double.parseDouble(longitud));
 
 
-                                addMarker(new GeoPoint(Double.parseDouble(latitud), Double.parseDouble(longitud)), nombre, cantCanchas, idComplejo);
+                                markerLocation.setLatitude(complejoPoint.getLatitude());
+                                markerLocation.setLongitude(complejoPoint.getLongitude());
 
-                                //cargo la lista de complejos en el scrollview
-                          /*      LinearLayout linearLayout = new LinearLayout(Home.this);
-                                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                                Float distancia = markerLocation.distanceTo(locationGPS)/1000;
+                                Log.i("logReserva", "complejo: " + nombre + " distancia: " + distancia + " km");
+                                NumberFormat formatter = new DecimalFormat("0.00");
+                                String dist = formatter.format(distancia).toString();
 
-
-                                TextView tituloView = new TextView(Home.this);
-
-                                tituloView.setBackground(ContextCompat.getDrawable(Home.this, R.drawable.input_box));
-                                tituloView.setTextColor(ContextCompat.getColor(Home.this, R.color.white));
-                                tituloView.setPadding(40,40,40,40);
-                                tituloView.setId(Integer.parseInt(idComplejo));
-                                int idTextview = tituloView.getId();
-                                tituloView.setText(nombre + "\n" + "canchas disponibles: " + cantCanchas + "\n" + "Reserva ya");
+                                // comparo la distancia seleccionada por el usuario con la del complejo
+                                // si es menor agrego el marcador en el mapa y la cardview en la vista
 
 
-                                tituloView.setOnClickListener(onComplejoClickListerner);
-                                linearLayout.addView(tituloView);
+                                if ( distancia < filtroDistancia) {
 
-                                parentLayout.addView(linearLayout);*/
+                                    Log.i("logReserva", "la distancia entre el usuario y el complejo es menor al filtro");
+                                    items.add(new Complejo(idComplejo, nombre, imagenComplejo, "Calle " + calle + " Nro: " + numero, cantCanchas, dist + " Km."));
+                                    addMarker(complejoPoint, nombre, cantCanchas, idComplejo);
+
+                                }
+
+
                             }
 
                             // Crear un nuevo adaptador
                             final ComplejosAdapter adapter = new ComplejosAdapter(items);
                             recycler.setAdapter(adapter);
+
+                            // prueba centrar elemento seleccionado
+                           // SnapHelper snapHelperComplejos = new LinearSnapHelper();
+                           // snapHelperComplejos.attachToRecyclerView(recycler);
+                            // fin prueba
+
+                            // evento del item seleccionado
+
+
 
                             int resId = R.anim.layout_animation_rotate_in;
                             LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(Home.this, resId);
@@ -342,7 +447,7 @@ public class Home extends AppCompatActivity {
                             adapter.setOnClickListener(new ComplejosAdapter.OnClickListener() {
                                 @Override
                                 public void onClick(int position, Complejo model) {
-
+                                    Log.i("logReserva", "entro al listener del complejo");
                                     Intent intentRervaCancha = new Intent(Home.this, ReservaCanchasActivity.class);
                                     intentRervaCancha.putExtra("complejoId", model.getId());
                                     intentRervaCancha.putExtra("fecha", fecha);
@@ -380,10 +485,16 @@ public class Home extends AppCompatActivity {
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setIcon(getResources().getDrawable(R.drawable.persona_saludo));
 
+        // Cargo la localizacion para medir la distancia con cada complejo
+        locationGPS.setLatitude(marker.getPosition().getLatitude());
+        locationGPS.setLongitude(marker.getPosition().getLongitude());
+        Log.i("logReserva", "marcador de gps: " + locationGPS.getLatitude() );
+
         mMapView.getOverlays().clear();
         mMapView.getOverlays().add(marker);
         mMapView.invalidate();
-        marker.setTitle("este so vo");
+        marker.setTitle("usted esta aqui");
+
     }
 
     public void addMarker (GeoPoint center, String nombreEstadio, String cantCanchas, String id){

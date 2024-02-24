@@ -8,13 +8,15 @@ public class Cancha {
     private String id;
     private String capacidad;
     private String techada;
+    private String costo;
 
-    public Cancha(String id, String capacidad, String techada) {
+    public Cancha(String id, String capacidad, String techada, String costo) {
      //   this.complejo = complejo;
      //   this.direccion = direccion;
         this.id = id;
         this.capacidad = capacidad;
         this.techada = techada;
+        this.costo = costo;
       //  this.imagen_complejo = imagen_complejo;
     }
 
@@ -43,5 +45,11 @@ public class Cancha {
         this.techada = techada;
     }
 
+    public String getCosto() {
+        return costo;
+    }
 
+    public void setCosto(String costo) {
+        this.costo = costo;
+    }
 }

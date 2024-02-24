@@ -78,9 +78,10 @@ public class ReservaCanchasActivity extends AppCompatActivity {
                                 String idCancha = object.getString("id");
                                 String capacidad = object.getString("capacidad");
                                 String techada = object.getString("techado");
+                                String costo = object.getString("costo");
 
                                 //Toast.makeText(Home.this, "complejo:" + nombre, Toast.LENGTH_SHORT).show();
-                                items.add(new Cancha(idCancha, capacidad, techada));
+                                items.add(new Cancha(idCancha, capacidad, techada, costo));
 
 
                             }

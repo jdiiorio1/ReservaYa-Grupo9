@@ -26,7 +26,7 @@ public class CanchasAdapter extends RecyclerView.Adapter<CanchasAdapter.CanchasV
         public TextView capacidad;
         public TextView techada;
 
-        public Button reservar;
+        public TextView costo;
 
 
 
@@ -37,7 +37,7 @@ public class CanchasAdapter extends RecyclerView.Adapter<CanchasAdapter.CanchasV
 
             capacidad = (TextView) v.findViewById(R.id.capacidad);
             techada = (TextView) v.findViewById(R.id.techada);
-           // reservar = (Button) v.findViewById(R.id.reservar);
+            costo = (TextView) v.findViewById(R.id.costo);
 
 
 
@@ -72,6 +72,7 @@ public class CanchasAdapter extends RecyclerView.Adapter<CanchasAdapter.CanchasV
 
         viewHolder.capacidad.setText("Cancha de " + items.get(i).getCapacidad());
         viewHolder.techada.setText("Techada: " + techo);
+        viewHolder.costo.setText("$" + items.get(i).getCosto());
 
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

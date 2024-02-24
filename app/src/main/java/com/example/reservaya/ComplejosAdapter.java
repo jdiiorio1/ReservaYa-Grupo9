@@ -21,6 +21,7 @@ public class ComplejosAdapter extends RecyclerView.Adapter<ComplejosAdapter.Comp
         public TextView nombre;
         public TextView direccion;
         public TextView cantidad;
+        public TextView distancia;
 
 
         public Button reservar;
@@ -32,6 +33,7 @@ public class ComplejosAdapter extends RecyclerView.Adapter<ComplejosAdapter.Comp
             nombre = (TextView) v.findViewById(R.id.nombre_complejo);
             direccion = (TextView) v.findViewById(R.id.direccion_complejo);
             cantidad = (TextView) v.findViewById(R.id.cant_canchas);
+            distancia = (TextView) v.findViewById(R.id.tv_distancia);
 
 
 
@@ -60,6 +62,7 @@ public class ComplejosAdapter extends RecyclerView.Adapter<ComplejosAdapter.Comp
         viewHolder.nombre.setText(items.get(i).getNombre());
         viewHolder.direccion.setText(items.get(i).getDireccion());
         viewHolder.cantidad.setText(items.get(i).getCanchasDisponibles() + " canchas disponibles");
+        viewHolder.distancia.setText(items.get(i).getDistancia());
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

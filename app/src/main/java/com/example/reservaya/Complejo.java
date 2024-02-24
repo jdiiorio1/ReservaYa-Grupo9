@@ -7,13 +7,15 @@ public class Complejo {
     private int imagenComplejo;
     private String direccion;
     private String canchasDisponibles;
+    private String distancia;
 
-    public Complejo(String id, String nombre, int imagenComplejo, String direccion, String canchasDisponibles) {
+    public Complejo(String id, String nombre, int imagenComplejo, String direccion, String canchasDisponibles, String distancia) {
         this.id = id;
         this.nombre = nombre;
         this.imagenComplejo = imagenComplejo;
         this.direccion = direccion;
         this.canchasDisponibles = canchasDisponibles;
+        this.distancia = distancia;
     }
 
     public String getNombre() {
@@ -54,5 +56,13 @@ public class Complejo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getDistancia() {
+        return distancia;
+    }
+
+    public void setDistancia(String distancia) {
+        this.distancia = distancia;
     }
 }

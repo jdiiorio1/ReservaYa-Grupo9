@@ -7,7 +7,7 @@
         android:title="Principal"/>
     <item
         android:id="@+id/bt_historial_aficionado"
-        android:icon="@drawable/edit"
+        android:icon="@drawable/historial"
         android:title="Editar perfil"/>
 
     <item
