@@ -42,4 +42,9 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1")
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
     implementation("org.slf4j:slf4j-android:1.7.21")
+
+
+
+
+
 }

@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void consultarUsuario (View view) {
         requestQueue = Volley.newRequestQueue(this);
-        String URL = "http://192.168.1.42/backend/consultarUsuario.php?correo_electronico="+correo.getText().toString();
+        String URL = "http://192.168.1.35/backend/consultarUsuario.php?correo_electronico="+correo.getText().toString();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -76,16 +76,19 @@ public class LoginActivity extends AppCompatActivity {
                             if (response.has("correo_electronico") && response.has("contrasena") && response.has("propietario")) {
                                 String correo_electronico = response.getString("correo_electronico");
                                 String password = response.getString("contrasena");
+                                int id = response.getInt("id");
                                 int propietario = response.getInt("propietario");
                                 if (correo_electronico.equals(correo.getText().toString())) {
                                     if (password.equals(pass.getText().toString())) {
                                         if (propietario == 1){
                                             Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
                                             Intent intentHome = new Intent(LoginActivity.this, PropietarioActivity.class);
+                                            intentHome.putExtra("id", id);
                                             startActivity(intentHome);
                                         }else {
                                             Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
                                             Intent intentHome = new Intent(LoginActivity.this, Home.class);
+                                            intentHome.putExtra("id_usuario", id);
                                             startActivity(intentHome);
                                         }
                                     } else {
