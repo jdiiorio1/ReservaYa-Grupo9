@@ -31,7 +31,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/input_box"
         android:drawableLeft="@drawable/bs_person"
@@ -52,18 +52,17 @@
         app:layout_constraintTop_toBottomOf="@+id/titulo" />
 
     <EditText
-        android:id="@+id/et_razonSocial"
+        android:id="@+id/et_alias"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="436dp"
+        android:layout_marginTop="450dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/input_box"
         android:drawableLeft="@drawable/bs_person"
         android:drawableTint="@color/white"
         android:ems="10"
-        android:hint="Numero de Cuit/Cuil"
-        android:inputType="number"
+        android:hint="Alias"
         android:minHeight="48dp"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
@@ -109,6 +108,7 @@
         android:drawableLeft="@drawable/baseline_security_24"
         android:drawableTint="@color/white"
         android:ems="10"
+        android:textColor="@color/white"
         android:hint="******"
         android:inputType="textPassword"
         android:minHeight="48dp"
@@ -121,6 +121,30 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/et_password"
         app:layout_constraintTop_toBottomOf="@+id/et_password" />
+
+    <EditText
+        android:id="@+id/et_cuil"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/input_box"
+        android:drawableLeft="@drawable/baseline_cuil"
+        android:drawableTint="@color/white"
+        android:ems="10"
+        android:maxLength="20"
+        android:textColor="@color/white"
+        android:hint="Cuil/Cuit"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/et_repassword"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/et_repassword"
+        app:layout_constraintTop_toBottomOf="@+id/et_repassword" />
 
     <EditText
         android:id="@+id/et_mail"
@@ -150,7 +174,7 @@
         android:id="@+id/bt_registrar"
         android:layout_width="377dp"
         android:layout_height="53dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/input_button"
         android:backgroundTint="@color/white"
         android:text="Registrar"
@@ -163,7 +187,7 @@
         android:id="@+id/tv_back_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:clickable="true"
         android:text="Ya tengo una cuenta"
         android:textColor="@color/white"
@@ -177,45 +201,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="15dp"
         android:backgroundTint="@color/green"
         android:shadowColor="@color/green"
         android:text="¿Es propietario de un complejo?"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/et_repassword"
-        app:layout_constraintTop_toBottomOf="@+id/et_repassword" />
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="200dp"
-        tools:layout_editor_absoluteY="509dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@+id/switchRol"
-        app:layout_constraintTop_toBottomOf="@+id/switchRol"
-        android:visibility="gone">
-
-        <RadioButton
-            android:id="@+id/radioCuil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cuil"
-            android:textColor="@color/white"
-            android:textSize="20sp"/>
-
-        <RadioButton
-            android:id="@+id/radioCuit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cuit"
-            android:textColor="@color/white"
-            android:textSize="20sp"/>
-
-    </RadioGroup>
-
+        app:layout_constraintStart_toStartOf="@+id/et_cuil"
+        app:layout_constraintTop_toBottomOf="@+id/et_cuil" />
 
 
 
