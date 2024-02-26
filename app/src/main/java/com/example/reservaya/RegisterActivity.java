@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,15 +41,15 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText repass;
     private Button registrar;
 
+    private EditText cuil;
+
     private Switch mySwitch;
 
-    private RadioGroup radioGroup;
-
-    private EditText razonSocial;
+    private EditText alias;
 
     RequestQueue requestQueue;
-    private static final String urlInsertarAficionado="http://192.168.1.35/backend/insertarAficionado.php";
-    private static final String urlInsertarPropietario="http://192.168.1.35/backend/insertarPropietario.php";
+    private static final String urlInsertarAficionado="http://192.168.1.53/reservaya_backend/insertarAficionado.php";
+    private static final String urlInsertarPropietario="http://192.168.1.53/reservaya_backend/insertarPropietario.php";
 
 
     @Override
@@ -68,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.et_mail);
         pass = findViewById(R.id.et_password);
         repass = findViewById(R.id.et_repassword);
+        cuil = findViewById(R.id.et_cuil);
         registrar = findViewById(R.id.bt_registrar);
         backLogin = findViewById(R.id.tv_back_login);
 
@@ -77,19 +79,15 @@ public class RegisterActivity extends AppCompatActivity {
         backLogin.setOnClickListener(backLoginistener);
         registrar.setOnClickListener(registrarListener);
         mySwitch = findViewById(R.id.switchRol);
-        radioGroup = findViewById(R.id.radioGroup);
-        radioGroup.setVisibility(View.INVISIBLE);
-        razonSocial = findViewById(R.id.et_razonSocial);
-
+        alias = findViewById(R.id.et_alias);
+        alias.setVisibility(View.GONE);
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    radioGroup.setVisibility(View.VISIBLE);
-                    razonSocial.setVisibility(View.VISIBLE);
+                    alias.setVisibility(View.VISIBLE);
                 } else {
-                    radioGroup.setVisibility(View.GONE);
-                    razonSocial.setVisibility(View.GONE);
+                    alias.setVisibility(View.GONE);
                 }
             }
         });
@@ -116,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        if (radioGroup.getVisibility()==view.VISIBLE){
+        if (alias.getVisibility()==view.VISIBLE){
             StringRequest stringRequest= new StringRequest(
                     Request.Method.POST,
                     urlInsertarPropietario,
@@ -142,16 +140,17 @@ public class RegisterActivity extends AppCompatActivity {
                     params.put("contrasena", pass.getText().toString());
                     boolean esPropietario = true;
                     params.put("propietario", esPropietario ? "1" : "0");
-                    params.put("cuil", razonSocial.getText().toString());
-
+                    long cuilLong = Long.parseLong(cuil.getText().toString());
+                    params.put("cuil", String.valueOf(cuilLong));
+                    params.put("alias", alias.getText().toString());
                     return params;
                 }
             };
             requestQueue.add(stringRequest);
 
         } else {
-            if (radioGroup.getVisibility()==view.INVISIBLE){
-
+            if (alias.getVisibility()==view.GONE){
+                Log.i("nuevo aficionado", "entre al metodo de aficionado");
                 StringRequest stringRequest= new StringRequest(
                         Request.Method.POST,
                         urlInsertarAficionado,
@@ -177,8 +176,8 @@ public class RegisterActivity extends AppCompatActivity {
                         params.put("contrasena", pass.getText().toString());
                         boolean esPropietario = false;
                         params.put("propietario", esPropietario ? "1" : "0");
-                        String equipo = "Boca Jr";
-                        params.put("equipo", equipo.toString());
+                        long cuilLong = Long.parseLong(cuil.getText().toString());
+                        params.put("cuil", String.valueOf(cuilLong));
                         return params;
                     }
                 };
@@ -243,8 +242,13 @@ public class RegisterActivity extends AppCompatActivity {
             error = false;
         }
 
-        if(radioGroup.getVisibility()==View.VISIBLE && razonSocial.getText().toString().isEmpty()){
-            Toast.makeText(getApplicationContext(), "Ingrese su Cuil o Cuit", Toast.LENGTH_LONG).show();
+        if(alias.getVisibility()==View.VISIBLE && alias.getText().toString().isEmpty()){
+            Toast.makeText(getApplicationContext(), "Ingrese su alias", Toast.LENGTH_LONG).show();
+            error = false;
+        }
+
+        if (TextUtils.isEmpty(cuil.getText().toString()) || (cuil.getText().toString().length() != 11 )) {
+            Toast.makeText(RegisterActivity.this, "El cuil debe contener 11 numeros", Toast.LENGTH_LONG).show();
             error = false;
         }
 
