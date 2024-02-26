@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void consultarUsuario (View view) {
         requestQueue = Volley.newRequestQueue(this);
-        String URL = "http://192.168.1.35/backend/consultarUsuario.php?correo_electronico="+correo.getText().toString();
+        String URL = "http://192.168.1.53/backend/consultarUsuario.php?correo_electronico="+correo.getText().toString();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,

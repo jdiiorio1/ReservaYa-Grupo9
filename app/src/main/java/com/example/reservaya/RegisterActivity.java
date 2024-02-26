@@ -48,8 +48,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText alias;
 
     RequestQueue requestQueue;
-    private static final String urlInsertarAficionado="http://192.168.1.53/reservaya_backend/insertarAficionado.php";
-    private static final String urlInsertarPropietario="http://192.168.1.53/reservaya_backend/insertarPropietario.php";
+    private static final String urlInsertarAficionado="http://192.168.1.53/backend/insertarAficionado.php";
+    private static final String urlInsertarPropietario="http://192.168.1.53/backend/insertarPropietario.php";
 
 
     @Override

@@ -223,18 +223,36 @@
             android:textColor="@color/white"
             android:textColorHint="@color/white"/>
 
-        <Button
-            android:id="@+id/btn_gps"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/green"
-            android:text="Obtener Ubicación"
-            android:textColor="@color/white"
+            android:orientation="horizontal"
             android:layout_marginVertical="10dp"
-            android:textSize="20sp"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="96dp"
-            tools:layout_editor_absoluteY="634dp" />
+            android:paddingHorizontal="20dp">
 
-</LinearLayout>
+            <Button
+                android:id="@+id/btn_gps"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:text="Ubicación"
+                android:textColor="@color/white"
+                android:textSize="20sp"/>
+
+            <Button
+                android:id="@+id/btn_guardar"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:layout_marginLeft="5dp"
+                android:text="Guardar"
+                android:textColor="@color/white"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
 </LinearLayout>
