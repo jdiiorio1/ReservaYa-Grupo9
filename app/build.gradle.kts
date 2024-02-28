@@ -42,6 +42,7 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1")
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
     implementation("org.slf4j:slf4j-android:1.7.21")
+    implementation ("com.google.android.gms:play-services-location:19.0.0")
 
 
 
