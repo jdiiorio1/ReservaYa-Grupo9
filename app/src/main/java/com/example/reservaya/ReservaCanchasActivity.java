@@ -2,11 +2,13 @@ package com.example.reservaya;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
 
 public class ReservaCanchasActivity extends AppCompatActivity {
 
@@ -102,6 +106,7 @@ public class ReservaCanchasActivity extends AppCompatActivity {
                             recycler.setLayoutAnimation(animation);
                             adapter.notifyDataSetChanged();
 
+
                             adapter.setOnClickListener(new CanchasAdapter.OnClickListener() {
                                 @Override
                                 public void onClick(int position, Cancha model) {
@@ -114,6 +119,17 @@ public class ReservaCanchasActivity extends AppCompatActivity {
                                     dialogoConfirmacion.setPositiveButton("Reservar", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+
+                                            // Mercadopago
+                                            String url = "https://api.mercadopago.com/v1/payments";
+                                            CustomTabsIntent intent = new CustomTabsIntent.Builder()
+                                                    .build();
+                                            intent.launchUrl(ReservaCanchasActivity.this, Uri.parse(url));
+
+                                            // realizar pago de verdad
+
+
+
                                             realizarReserva(model.getId(), idUsuario, fecha, hora);
                                             //Toast.makeText(ReservaCanchas.this, "Reservada", Toast.LENGTH_SHORT).show();
                                         }

@@ -239,6 +239,7 @@ public class Home extends AppCompatActivity {
 
         // consulto a la base de datos para obtener los complejos y agregar los marcadores en el mapa
         //cargarMapaConComplejos();
+        cargarMapaConComplejos(tvCalendario.getText().toString(), tvHorario.getText().toString(), distanciaInt);
 
 
 
@@ -374,6 +375,7 @@ public class Home extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
         String URL = "http://192.168.1.35/backend/cargarComplejosFiltrados.php?fecha=" + fecha + "&hora=" + hora;
+        Log.i("logReserva", URL);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL,
@@ -419,7 +421,7 @@ public class Home extends AppCompatActivity {
                                 if ( distancia < filtroDistancia) {
 
                                     Log.i("logReserva", "la distancia entre el usuario y el complejo es menor al filtro");
-                                    items.add(new Complejo(idComplejo, nombre, imagenComplejo, "Calle " + calle + " Nro: " + numero, cantCanchas, dist + " Km."));
+                                    items.add(new Complejo(idComplejo, nombre, imagenComplejo, "Calle " + calle + " Nro: " + numero, cantCanchas, dist + " Km.", true));
                                     addMarker(complejoPoint, nombre, cantCanchas, idComplejo);
 
                                 }

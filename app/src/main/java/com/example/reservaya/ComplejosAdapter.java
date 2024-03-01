@@ -24,7 +24,8 @@ public class ComplejosAdapter extends RecyclerView.Adapter<ComplejosAdapter.Comp
         public TextView distancia;
 
 
-        public Button reservar;
+        public Button eliminar;
+
 
 
         public ComplejosViewHolder(View v) {
@@ -34,6 +35,7 @@ public class ComplejosAdapter extends RecyclerView.Adapter<ComplejosAdapter.Comp
             direccion = (TextView) v.findViewById(R.id.direccion_complejo);
             cantidad = (TextView) v.findViewById(R.id.cant_canchas);
             distancia = (TextView) v.findViewById(R.id.tv_distancia);
+            eliminar = (Button)  v.findViewById(R.id.bt_eliminar_complejo);
 
 
 
@@ -61,8 +63,14 @@ public class ComplejosAdapter extends RecyclerView.Adapter<ComplejosAdapter.Comp
         viewHolder.imagen.setImageResource(items.get(i).getImagenComplejo());
         viewHolder.nombre.setText(items.get(i).getNombre());
         viewHolder.direccion.setText(items.get(i).getDireccion());
+
         viewHolder.cantidad.setText(items.get(i).getCanchasDisponibles() + " canchas disponibles");
         viewHolder.distancia.setText(items.get(i).getDistancia());
+
+        Boolean propietario = items.get(i).getPropietario();
+        if (propietario) {
+            viewHolder.eliminar.setVisibility(View.VISIBLE);
+        }
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,13 +9,16 @@ public class Complejo {
     private String canchasDisponibles;
     private String distancia;
 
-    public Complejo(String id, String nombre, int imagenComplejo, String direccion, String canchasDisponibles, String distancia) {
+    private Boolean propietario;
+
+    public Complejo(String id, String nombre, int imagenComplejo, String direccion, String canchasDisponibles, String distancia, Boolean propietario) {
         this.id = id;
         this.nombre = nombre;
         this.imagenComplejo = imagenComplejo;
         this.direccion = direccion;
         this.canchasDisponibles = canchasDisponibles;
         this.distancia = distancia;
+        this.propietario = propietario;
     }
 
     public String getNombre() {
@@ -64,5 +67,13 @@ public class Complejo {
 
     public void setDistancia(String distancia) {
         this.distancia = distancia;
+    }
+
+    public Boolean getPropietario() {
+        return propietario;
+    }
+
+    public void setPropietario(Boolean propietario) {
+        this.propietario = propietario;
     }
 }
