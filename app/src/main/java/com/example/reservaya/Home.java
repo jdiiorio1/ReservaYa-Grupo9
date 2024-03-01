@@ -373,7 +373,7 @@ public class Home extends AppCompatActivity {
 
 
         requestQueue = Volley.newRequestQueue(this);
-        String URL = "http://192.168.1.35/backend/cargarComplejosFiltrados.php?fecha=" + fecha + "&hora=" + hora;
+        String URL = "http://192.168.1.53/backend/cargarComplejosFiltrados.php?fecha=" + fecha + "&hora=" + hora;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL,

@@ -50,7 +50,7 @@ Declarar instancias globales
         // Obtener las reservas realizadas por el usuario desde la base de datos
         requestQueue = Volley.newRequestQueue(this);
 
-        String URL = "http://192.168.1.35/backend/cargarHistorialAficionado.php?id_usuario="+ idUsuario;
+        String URL = "http://192.168.1.53/backend/cargarHistorialAficionado.php?id_usuario="+ idUsuario;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL,

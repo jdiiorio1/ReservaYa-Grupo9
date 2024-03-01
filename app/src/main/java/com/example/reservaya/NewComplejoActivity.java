@@ -64,6 +64,7 @@ public class NewComplejoActivity extends AppCompatActivity {
         provincia = findViewById(R.id.provincia);
         guardar = findViewById(R.id.btn_guardar);
         ubicacion = findViewById(R.id.btn_gps);
+        Log.i("Hora", hora_ini.getText().toString());
 
         // Obtener el ID del propietario pasado desde la pantalla anterior
         Intent intent = getIntent();
@@ -138,8 +139,11 @@ public class NewComplejoActivity extends AppCompatActivity {
                 JSONArray jsonArray = new JSONArray(response.toString());
                 if (jsonArray.length() > 0) {
                     JSONObject location = jsonArray.getJSONObject(0);
+
                     latitud = location.getDouble("lat");
                     longitud = location.getDouble("lon");
+                    Log.i("ubicacion", latitud.toString());
+                    Log.i("ubicacion", longitud.toString());
                     return new LatLng(latitud, longitud);
                 }
             } catch (IOException | JSONException e) {
@@ -215,10 +219,8 @@ public class NewComplejoActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("nombre", nombreComplejo.getText().toString());
-                String horaInicioConFormato = hora_ini.getText().toString() + ":00";
-                String horaFinConFormato = hora_fin.getText().toString() + ":00";
-                params.put("hora_inicio", horaInicioConFormato);
-                params.put("hora_fin", horaFinConFormato);
+                params.put("hora_inicio", hora_ini.getText().toString());
+                params.put("hora_fin", hora_fin.getText().toString());
                 params.put("calle", calle.getText().toString());
                 params.put("numero", numero.getText().toString());
                 params.put("nombreLocalidad", localidad.getText().toString());

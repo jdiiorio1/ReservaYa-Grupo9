@@ -176,7 +176,7 @@ public class ReservaCanchasActivity extends AppCompatActivity {
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
-                "http://192.168.1.35/backend/insertarReservaEnAgenda.php",
+                "http://192.168.1.53/backend/insertarReservaEnAgenda.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
